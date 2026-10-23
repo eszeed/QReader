@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FeedSource {
@@ -30,7 +31,9 @@ Future<List<FeedSource>> loadFeedSources() async {
     return List.from(defaultFeedSources);
   }
   final List<dynamic> decoded = json.decode(jsonStr);
-  return decoded.map((e) => FeedSource.fromJson(e as Map<String, dynamic>)).toList();
+  return decoded
+      .map((e) => FeedSource.fromJson(e as Map<String, dynamic>))
+      .toList();
 }
 
 /// 保存订阅源列表到 SharedPreferences

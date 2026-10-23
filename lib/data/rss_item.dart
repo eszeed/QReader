@@ -26,12 +26,12 @@ class rss_item {
 
   factory rss_item.fromXml(XmlElement xml) {
     return rss_item(
-      title: xml_parser.find(xml, "title").text,
-      link: xml_parser.find(xml, "link").text,
-      description: xml_parser.find(xml, "description").text,
-      author: xml_parser.findOrNull(xml, "author")?.text ?? '',
-      pubDate: xml_parser.findOrNull(xml, "pubDate")?.text ?? '',
-      guid: xml_parser.findOrNull(xml, "guid")?.text ?? '',
+      title: xml_parser.find(xml, "title").innerText,
+      link: xml_parser.find(xml, "link").innerText,
+      description: xml_parser.find(xml, "description").innerText,
+      author: xml_parser.findOrNull(xml, "author")?.innerText ?? '',
+      pubDate: xml_parser.findOrNull(xml, "pubDate")?.innerText ?? '',
+      guid: xml_parser.findOrNull(xml, "guid")?.innerText ?? '',
     );
   }
 

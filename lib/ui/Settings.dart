@@ -36,9 +36,7 @@ class _Settings extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('设置'),
-      ),
+      appBar: AppBar(title: const Text('设置')),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
@@ -52,9 +50,8 @@ class _Settings extends State<Settings> {
                 children: [
                   Text(
                     '显示设置',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   _ThemeOption(
@@ -110,18 +107,18 @@ class _ThemeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RadioListTile<ThemeMode>(
-      title: Text(title),
-      subtitle: Text(subtitle),
-      secondary: Icon(icon),
-      value: value,
+    return RadioGroup<ThemeMode>(
       groupValue: groupValue,
       onChanged: (mode) {
-        if (mode != null) {
-          onChanged(mode);
-        }
+        if (mode != null) onChanged(mode);
       },
-      contentPadding: EdgeInsets.zero,
+      child: RadioListTile<ThemeMode>(
+        title: Text(title),
+        subtitle: Text(subtitle),
+        secondary: Icon(icon),
+        value: value,
+        contentPadding: EdgeInsets.zero,
+      ),
     );
   }
 }

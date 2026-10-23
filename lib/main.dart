@@ -14,8 +14,9 @@ class MyApp extends StatefulWidget {
   const MyApp({super.key, required this.initialTheme});
 
   /// 全局主题模式通知器，可在其他页面中更新主题
-  static final ValueNotifier<ThemeMode> themeNotifier =
-      ValueNotifier(ThemeMode.system);
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(
+    ThemeMode.system,
+  );
 
   @override
   State<MyApp> createState() => _MyAppState();

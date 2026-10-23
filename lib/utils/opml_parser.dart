@@ -20,8 +20,8 @@ List<FeedSource> parseOpml(String xmlContent) {
         final name = element.getAttribute('title')?.trim().isNotEmpty == true
             ? element.getAttribute('title')!.trim()
             : element.getAttribute('text')?.trim().isNotEmpty == true
-                ? element.getAttribute('text')!.trim()
-                : xmlUrl;
+            ? element.getAttribute('text')!.trim()
+            : xmlUrl;
         feeds.add(FeedSource(name: name, url: xmlUrl));
       }
     }

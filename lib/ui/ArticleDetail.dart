@@ -8,11 +8,7 @@ class ArticleDetail extends StatelessWidget {
   final rss_item item;
   final String sourceName;
 
-  const ArticleDetail({
-    super.key,
-    required this.item,
-    this.sourceName = '',
-  });
+  const ArticleDetail({super.key, required this.item, this.sourceName = ''});
 
   @override
   Widget build(BuildContext context) {

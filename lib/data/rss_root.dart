@@ -17,7 +17,6 @@ class rss_root {
 
   List<rss_item> items = [];
 
-
   rss_root({
     required this.title,
     required this.link,
@@ -30,12 +29,13 @@ class rss_root {
 
   factory rss_root.fromXml(XmlDocument xml) {
     return rss_root(
-      title: xml_parser.findElm(xml, "title").text,
-      link: xml_parser.findElm(xml, "link").text,
-      description: xml_parser.findElm(xml, "description").text,
-      language: xml_parser.findElmOrNull(xml, "language")?.text ?? '',
-      managingEditor: xml_parser.findElmOrNull(xml, "managingEditor")?.text ?? '',
-      pubDate: xml_parser.findElmOrNull(xml, "pubDate")?.text ?? '',
+      title: xml_parser.findElm(xml, "title").innerText,
+      link: xml_parser.findElm(xml, "link").innerText,
+      description: xml_parser.findElm(xml, "description").innerText,
+      language: xml_parser.findElmOrNull(xml, "language")?.innerText ?? '',
+      managingEditor:
+          xml_parser.findElmOrNull(xml, "managingEditor")?.innerText ?? '',
+      pubDate: xml_parser.findElmOrNull(xml, "pubDate")?.innerText ?? '',
       items: xml_parser
           .findElm(xml, "channel")
           .findElements("item")

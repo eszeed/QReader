@@ -115,30 +115,23 @@ class _Home extends State<Home> {
                   const SizedBox(height: 16),
                   Text(
                     '暂无订阅源',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     '点击下方按钮添加或导入订阅源',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[400],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[400]),
                   ),
                 ],
               ),
             )
           : _loading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 80),
-                  itemCount: rss_feed.items.length,
-                  itemBuilder: (context, index) =>
-                      toElement(rss_feed.items[index]),
-                ),
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.only(bottom: 80),
+              itemCount: rss_feed.items.length,
+              itemBuilder: (context, index) => toElement(rss_feed.items[index]),
+            ),
     );
   }
 
@@ -190,11 +183,7 @@ class _Home extends State<Home> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  Icon(
-                    Icons.chevron_right,
-                    size: 18,
-                    color: Colors.grey[400],
-                  ),
+                  Icon(Icons.chevron_right, size: 18, color: Colors.grey[400]),
                 ],
               ),
             ],
@@ -230,9 +219,8 @@ class _Home extends State<Home> {
         _loading = false;
       });
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('获取 RSS 失败：$e')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('获取 RSS 失败：$e')));
       }
     }
   }

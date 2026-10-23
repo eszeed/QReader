@@ -94,9 +94,8 @@ class _FeedManager extends State<FeedManager> {
     await saveFeedSources(_sources);
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('已删除 $count 个订阅源')),
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('已删除 $count 个订阅源')));
     }
   }
 
@@ -144,9 +143,8 @@ class _FeedManager extends State<FeedManager> {
               final url = urlController.text.trim();
 
               if (name.isEmpty || url.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('名称和地址不能为空')),
-                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text('名称和地址不能为空')));
                 return;
               }
 
@@ -162,7 +160,7 @@ class _FeedManager extends State<FeedManager> {
               await saveFeedSources(_sources);
 
               setState(() {});
-              Navigator.of(ctx).pop();
+              if (ctx.mounted) Navigator.of(ctx).pop();
             },
             child: const Text('添加'),
           ),
@@ -212,9 +210,8 @@ class _FeedManager extends State<FeedManager> {
               final url = urlController.text.trim();
 
               if (name.isEmpty || url.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('名称和地址不能为空')),
-                );
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(const SnackBar(content: Text('名称和地址不能为空')));
                 return;
               }
 
@@ -222,7 +219,7 @@ class _FeedManager extends State<FeedManager> {
                 _sources[index] = FeedSource(name: name, url: url);
               });
               await saveFeedSources(_sources);
-              Navigator.of(ctx).pop();
+              if (ctx.mounted) Navigator.of(ctx).pop();
             },
             child: const Text('保存'),
           ),
@@ -250,7 +247,7 @@ class _FeedManager extends State<FeedManager> {
                 _sources.removeAt(index);
               });
               await saveFeedSources(_sources);
-              Navigator.of(ctx).pop();
+              if (ctx.mounted) Navigator.of(ctx).pop();
             },
             child: const Text('删除'),
           ),
@@ -280,7 +277,7 @@ class _FeedManager extends State<FeedManager> {
       barrierDismissible: false,
       builder: (ctx) => ValueListenableBuilder<_ImportProgress>(
         valueListenable: progress,
-        builder: (_, p, __) => AlertDialog(
+        builder: (_, p, _) => AlertDialog(
           title: Text(p.title),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -324,7 +321,9 @@ class _FeedManager extends State<FeedManager> {
         content = await File(filePath).readAsString();
       } catch (e) {
         progress.value = _ImportProgress(
-          value: 1.0, title: '读取失败', message: '读取文件失败：$e',
+          value: 1.0,
+          title: '读取失败',
+          message: '读取文件失败：$e',
         );
         return;
       }
@@ -342,7 +341,9 @@ class _FeedManager extends State<FeedManager> {
         imported = parseOpml(content);
       } catch (e) {
         progress.value = _ImportProgress(
-          value: 1.0, title: '解析失败', message: '解析 OPML 失败：$e',
+          value: 1.0,
+          title: '解析失败',
+          message: '解析 OPML 失败：$e',
         );
         return;
       }
@@ -350,14 +351,17 @@ class _FeedManager extends State<FeedManager> {
 
       if (imported.isEmpty) {
         progress.value = _ImportProgress(
-          value: 1.0, title: '导入完成', message: '未在 OPML 文件中找到订阅源',
+          value: 1.0,
+          title: '导入完成',
+          message: '未在 OPML 文件中找到订阅源',
         );
         return;
       }
 
       final existingUrls = _sources.map((s) => s.url).toSet();
-      final newFeeds =
-          imported.where((f) => !existingUrls.contains(f.url)).toList();
+      final newFeeds = imported
+          .where((f) => !existingUrls.contains(f.url))
+          .toList();
       final skippedCount = imported.length - newFeeds.length;
 
       if (newFeeds.isEmpty) {
@@ -393,7 +397,8 @@ class _FeedManager extends State<FeedManager> {
         progress.value = _ImportProgress(
           value: 1.0,
           title: '导入完成',
-          message: '成功导入 ${newFeeds.length} 个订阅源'
+          message:
+              '成功导入 ${newFeeds.length} 个订阅源'
               '${skippedCount > 0 ? '，跳过 $skippedCount 个已存在的订阅源' : ''}',
         );
         await Future.delayed(const Duration(seconds: 2));
@@ -461,82 +466,79 @@ class _FeedManager extends State<FeedManager> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _sources.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.rss_feed, size: 64, color: Colors.grey[400]),
-                      const SizedBox(height: 16),
-                      Text(
-                        '暂无订阅源',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text('点击右上角 + 添加你的第一个 RSS 订阅源'),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.rss_feed, size: 64, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  Text(
+                    '暂无订阅源',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                   ),
-                )
-              : Column(
-                  children: [
-                    Expanded(
-                      child: _selectMode
-                          ? ListView.builder(
-                              padding: const EdgeInsets.only(bottom: 72),
-                              itemCount: _sources.length,
-                              itemBuilder: (context, index) {
-                                final source = _sources[index];
-                                final isSelected =
-                                    _selectedUrls.contains(source.url);
-                                return _SourceTile(
-                                  key: ValueKey(source.url),
-                                  source: source,
-                                  selectMode: true,
-                                  isSelected: isSelected,
-                                  onToggleSelect: () =>
-                                      _toggleSelect(source.url),
-                                  onEdit: () {},
-                                  onDelete: () {},
-                                );
-                              },
-                            )
-                          : ReorderableListView.builder(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              itemCount: _sources.length,
-                              onReorderItem: (oldIndex, newIndex) async {
-                                setState(() {
-                                  if (oldIndex < newIndex) newIndex -= 1;
-                                  final item = _sources.removeAt(oldIndex);
-                                  _sources.insert(newIndex, item);
-                                });
-                                await saveFeedSources(_sources);
-                              },
-                              itemBuilder: (context, index) {
-                                final source = _sources[index];
-                                final isSelected =
-                                    _selectedUrls.contains(source.url);
-                                return _SourceTile(
-                                  key: ValueKey(source.url),
-                                  source: source,
-                                  selectMode: false,
-                                  isSelected: isSelected,
-                                  onToggleSelect: () =>
-                                      _toggleSelect(source.url),
-                                  onEdit: () => _showEditDialog(index),
-                                  onDelete: () => _confirmDelete(index),
-                                );
-                              },
-                            ),
-                    ),
-                    if (_selectMode)
-                      _BatchDeleteBar(
-                        selectedCount: _selectedUrls.length,
-                        onDelete: _confirmBatchDelete,
-                      ),
-                  ],
+                  const SizedBox(height: 8),
+                  const Text('点击右上角 + 添加你的第一个 RSS 订阅源'),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: _selectMode
+                      ? ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 72),
+                          itemCount: _sources.length,
+                          itemBuilder: (context, index) {
+                            final source = _sources[index];
+                            final isSelected = _selectedUrls.contains(
+                              source.url,
+                            );
+                            return _SourceTile(
+                              key: ValueKey(source.url),
+                              source: source,
+                              selectMode: true,
+                              isSelected: isSelected,
+                              onToggleSelect: () => _toggleSelect(source.url),
+                              onEdit: () {},
+                              onDelete: () {},
+                            );
+                          },
+                        )
+                      : ReorderableListView.builder(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          itemCount: _sources.length,
+                          onReorderItem: (oldIndex, newIndex) async {
+                            setState(() {
+                              if (oldIndex < newIndex) newIndex -= 1;
+                              final item = _sources.removeAt(oldIndex);
+                              _sources.insert(newIndex, item);
+                            });
+                            await saveFeedSources(_sources);
+                          },
+                          itemBuilder: (context, index) {
+                            final source = _sources[index];
+                            final isSelected = _selectedUrls.contains(
+                              source.url,
+                            );
+                            return _SourceTile(
+                              key: ValueKey(source.url),
+                              source: source,
+                              selectMode: false,
+                              isSelected: isSelected,
+                              onToggleSelect: () => _toggleSelect(source.url),
+                              onEdit: () => _showEditDialog(index),
+                              onDelete: () => _confirmDelete(index),
+                            );
+                          },
+                        ),
                 ),
+                if (_selectMode)
+                  _BatchDeleteBar(
+                    selectedCount: _selectedUrls.length,
+                    onDelete: _confirmBatchDelete,
+                  ),
+              ],
+            ),
     );
   }
 }
@@ -567,10 +569,7 @@ class _SourceTile extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: ListTile(
         leading: selectMode
-            ? Checkbox(
-                value: isSelected,
-                onChanged: (_) => onToggleSelect(),
-              )
+            ? Checkbox(value: isSelected, onChanged: (_) => onToggleSelect())
             : const CircleAvatar(child: Icon(Icons.rss_feed)),
         title: Text(source.name),
         subtitle: Text(
@@ -608,10 +607,7 @@ class _BatchDeleteBar extends StatelessWidget {
   final int selectedCount;
   final VoidCallback onDelete;
 
-  const _BatchDeleteBar({
-    required this.selectedCount,
-    required this.onDelete,
-  });
+  const _BatchDeleteBar({required this.selectedCount, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -637,9 +633,7 @@ class _BatchDeleteBar extends StatelessWidget {
         children: [
           Expanded(
             child: Text(
-              selectedCount > 0
-                  ? '已选择 $selectedCount 个订阅源'
-                  : '请选择要删除的订阅源',
+              selectedCount > 0 ? '已选择 $selectedCount 个订阅源' : '请选择要删除的订阅源',
               style: TextStyle(
                 fontSize: 14,
                 color: theme.colorScheme.onSurfaceVariant,

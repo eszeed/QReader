@@ -104,9 +104,8 @@ class DrawerNavigation extends StatelessWidget {
             title: const Text('订阅源管理'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const FeedManager()),
-              );
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const FeedManager()));
             },
           ),
           ListTile(
@@ -114,9 +113,8 @@ class DrawerNavigation extends StatelessWidget {
             title: const Text('设置'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const Settings()),
-              );
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => const Settings()));
             },
           ),
         ],
