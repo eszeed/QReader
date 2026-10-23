@@ -55,7 +55,8 @@ jobs:
       - run: flutter pub get
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
         with:
@@ -77,7 +78,8 @@ jobs:
       - run: flutter pub get
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - run: flutter build web --release
       - name: 打包 Web 产物
         run: zip -r QReader-${{ steps.version.outputs.version }}-web.zip build/web
@@ -102,7 +104,8 @@ jobs:
       - name: 提取版本号
         id: version
         shell: bash
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - run: flutter build windows --release
       - name: 压缩 Windows 产物
         shell: pwsh
@@ -129,7 +132,8 @@ jobs:
       - run: flutter pub get
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - run: flutter build linux --release
       - name: 打包 Linux 产物
         run: zip -r QReader-${{ steps.version.outputs.version }}-linux-x64.zip build/linux/x64/release/bundle/
@@ -153,7 +157,8 @@ jobs:
       - run: flutter pub get
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - name: 安装 iOS Pod 依赖
         run: cd ios && pod install --repo-update
       - run: flutter build ios --release --no-codesign
@@ -179,7 +184,8 @@ jobs:
       - run: flutter pub get
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
       - run: flutter build macos --release
       - name: 打包 macOS 产物
         run: zip -r QReader-${{ steps.version.outputs.version }}-macos.zip build/macos/Build/Products/Release/
@@ -203,7 +209,8 @@ jobs:
 
       - name: 提取版本号
         id: version
-        run: echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep '^version:' pubspec.yaml | sed 's/version: *//')" >> $GITHUB_OUTPUT
 
       - name: 提取 Git Tag
         id: tag
