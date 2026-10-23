@@ -147,7 +147,7 @@ jobs:
     name: iOS 构建
     needs: test-lint
     runs-on: macos-latest
-    if: startsWith(github.ref, 'refs/tags/v') && hashFiles('ios/') != ''
+    if: startsWith(github.ref, 'refs/tags/v') && hashFiles('ios/**') != ''
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -174,7 +174,7 @@ jobs:
     name: macOS 构建
     needs: test-lint
     runs-on: macos-latest
-    if: startsWith(github.ref, 'refs/tags/v') && hashFiles('macos/') != ''
+    if: startsWith(github.ref, 'refs/tags/v') && hashFiles('macos/**') != ''
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
