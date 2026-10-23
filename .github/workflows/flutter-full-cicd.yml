@@ -109,7 +109,7 @@ jobs:
       - run: flutter build windows --release
       - name: 压缩 Windows 产物
         shell: pwsh
-        run: Compress-Archive -Path build\windows\x64\release\* -DestinationPath QReader-${{ steps.version.outputs.version }}-windows-x64.zip
+        run: Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath QReader-${{ steps.version.outputs.version }}-windows-x64.zip
       - uses: actions/upload-artifact@v4
         with:
           name: QReader-${{ steps.version.outputs.version }}-windows-x64.zip
